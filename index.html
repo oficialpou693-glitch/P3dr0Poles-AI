@@ -6,7 +6,7 @@
   <title>P3dr0Poles Studios | AI</title>
   <style>
     /* =========================================
-       CSS - ESTILO ULTRA-MINIMALISTA
+       CSS - DESIGN ULTRA-MINIMALISTA
        ========================================= */
     :root {
       --bg-color: #000000;
@@ -15,8 +15,8 @@
       --accent: #ffffff;
       --code-bg: #0a0a0a;
       --border-subtle: #1a1a1a;
-      --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+      --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', Consolas, monospace;
     }
 
     * {
@@ -37,7 +37,7 @@
       overflow: hidden;
     }
 
-    /* Logo no fundo - Marca D'água sutil */
+    /* Background Logo */
     .background-logo {
       position: absolute;
       top: 50%;
@@ -48,12 +48,12 @@
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      opacity: 0.02; /* Quase invisível para manter o minimalismo */
+      opacity: 0.03;
       pointer-events: none;
       z-index: 0;
     }
 
-    /* Contêiner Principal Sem Bordas Visíveis */
+    /* Container Principal */
     .main-wrapper {
       width: 100%;
       max-width: 800px;
@@ -64,7 +64,7 @@
       padding: 0 20px;
     }
 
-    /* Cabeçalho Limpo */
+    /* Header Limpo */
     header {
       padding: 40px 0 20px 0;
       text-align: center;
@@ -78,7 +78,7 @@
       color: var(--text-muted);
     }
 
-    /* Área do Chat */
+    /* Área de Chat */
     .chat-area {
       flex: 1;
       overflow-y: auto;
@@ -92,12 +92,12 @@
     .chat-area::-webkit-scrollbar {
       width: 4px;
     }
+
     .chat-area::-webkit-scrollbar-thumb {
       background: var(--border-subtle);
       border-radius: 4px;
     }
 
-    /* Linhas de Mensagem */
     .message-row {
       display: flex;
       flex-direction: column;
@@ -124,7 +124,7 @@
       color: var(--text-main);
     }
 
-    /* Estilização de Código Markdown */
+    /* Blocos de Código */
     .message-content pre {
       background: var(--code-bg);
       border: 1px solid var(--border-subtle);
@@ -141,7 +141,6 @@
       color: #a8a8b1;
     }
 
-    /* Código Inline */
     .message-content p > code {
       background: var(--border-subtle);
       padding: 2px 6px;
@@ -150,7 +149,7 @@
       color: var(--accent);
     }
 
-    /* Botão de Copiar (Aparece no bloco de código) */
+    /* Botão Copiar */
     .copy-btn {
       position: absolute;
       top: 8px;
@@ -165,6 +164,7 @@
       font-family: var(--font-stack);
       transition: all 0.2s;
     }
+
     .copy-btn:hover {
       background: #333;
       color: #fff;
@@ -185,6 +185,7 @@
       padding: 4px 12px;
       transition: border-color 0.3s;
     }
+
     .input-box:focus-within {
       border-color: #444;
     }
@@ -221,7 +222,6 @@
       color: var(--accent);
     }
 
-    /* Status de Digitação */
     .typing-indicator {
       display: none;
       font-size: 12px;
@@ -229,12 +229,11 @@
       margin-top: 8px;
       font-style: italic;
     }
-
   </style>
 </head>
 <body>
 
-  <!-- Logo de Fundo (Deixe o link aqui) -->
+  <!-- Logo de Fundo (Coloque o link da imagem na variável URL_DA_LOGO no JS) -->
   <div class="background-logo" id="brandLogo"></div>
 
   <div class="main-wrapper">
@@ -243,23 +242,18 @@
     </header>
 
     <div class="chat-area" id="chatArea">
-      <!-- Mensagem Inicial -->
       <div class="message-row">
         <div class="message-role">Sistema</div>
         <div class="message-content">
           Engine conectada: <code>openai/gpt-oss-120b</code>.<br>
-          Ambiente otimizado para Lua, C, C++, C# e Python. Aguardando instruções.
+          Ambiente pronto para auxílio em Lua, C, C++, C# e Python.
         </div>
       </div>
     </div>
 
     <div class="input-wrapper">
       <div class="input-box">
-        <textarea 
-          id="userInput" 
-          rows="1" 
-          placeholder="Escreva sua lógica ou cole seu código..."
-        ></textarea>
+        <textarea id="userInput" rows="1" placeholder="Escreva sua lógica ou cole seu código..."></textarea>
         <button class="send-btn" id="sendBtn">Enviar</button>
       </div>
       <div class="typing-indicator" id="typingStatus">Processando resposta...</div>
@@ -268,27 +262,32 @@
 
   <script>
     /* =========================================
-       JAVASCRIPT - LÓGICA E API (Modo Raciocínio)
+       JAVASCRIPT - LOGICA E COMUNICAÇÃO API
        ========================================= */
 
-    // 1. CONFIGURAÇÕES
-    const URL_DA_LOGO = ""; // Cole o link da sua imagem aqui
-    const API_KEY_GROQ = "SUA_API_KEY_AQUI"; // Sua chave gsk_...
+    // 1. LINK DA SUA LOGO (Cole o URL da imagem entre as aspas)
+    const URL_DA_LOGO = ""; 
+
+    // 2. SUA CHAVE DE API APLICADA
+    const API_KEY_GROQ = "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"; 
+
+    // 3. MODELO DEFINIDO
     const MODEL_NAME = "openai/gpt-oss-120b";
-    
+
+    // 4. INSTRUÇÕES DO SISTEMA
     const SYSTEM_PROMPT = `
       Você é a inteligência artificial central da P3dr0Poles Studios.
-      Aja com extrema precisão, raciocínio lógico profundo e minimalismo.
-      Seu foco absoluto é programação em Lua, C, C++, C# e Python.
-      Forneça códigos limpos, performáticos e explique sua lógica de forma técnica e direta.
+      Sua função principal é auxiliar no desenvolvimento de código.
+      Suas linguagens foco são: Lua, C, C++, C# e Python.
+      Forneça respostas diretas, códigos otimizados e bem explicados.
     `;
 
-    // 2. ESTADO DA APLICAÇÃO
+    // Estado da Aplicação
     let chatHistory = [
       { role: "system", content: SYSTEM_PROMPT.trim() }
     ];
 
-    // 3. ELEMENTOS DO DOM
+    // Mapeamento do DOM
     const DOM = {
       logo: document.getElementById('brandLogo'),
       chatArea: document.getElementById('chatArea'),
@@ -297,182 +296,179 @@
       typing: document.getElementById('typingStatus')
     };
 
-    // 4. INICIALIZAÇÃO
-    function init() {
-      if (URL_DA_LOGO) {
+    // Inicialização do Script
+    function initApp() {
+      if (URL_DA_LOGO.trim() !== "") {
         DOM.logo.style.backgroundImage = `url('${URL_DA_LOGO}')`;
       }
-      setupEventListeners();
+      registerEvents();
     }
 
-    function setupEventListeners() {
-      // Auto-redimensionar o textarea conforme digita
+    // Registro de Eventos
+    function registerEvents() {
+      // Ajuste automático do tamanho do Textarea
       DOM.input.addEventListener('input', function() {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
       });
 
-      // Enviar com Enter (sem Shift)
+      // Enviar ao pressionar Enter (sem Shift)
       DOM.input.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
-          processUserMessage();
+          handleSendMessage();
         }
       });
 
-      DOM.sendBtn.addEventListener('click', processUserMessage);
+      // Clique no botão Enviar
+      DOM.sendBtn.addEventListener('click', handleSendMessage);
 
-      // Delegação de evento para o botão de copiar gerado dinamicamente
+      // Listener para botões de copiar dinâmicos
       DOM.chatArea.addEventListener('click', function(e) {
         if (e.target.classList.contains('copy-btn')) {
-          copyToClipboard(e.target);
+          execCopyCode(e.target);
         }
       });
     }
 
-    // 5. LÓGICA DE MENSAGENS
-    async function processUserMessage() {
-      const text = DOM.input.value.trim();
-      if (!text) return;
+    // Manipulador de Envio
+    async function handleSendMessage() {
+      const promptText = DOM.input.value.trim();
+      if (!promptText) return;
 
-      // Resetar input
+      // Reseta Input
       DOM.input.value = '';
       DOM.input.style.height = 'auto';
-      
-      // Atualizar UI e Histórico
-      renderMessage('Usuário', text);
-      chatHistory.push({ role: "user", content: text });
-      
-      // Chamar API
-      setTypingStatus(true);
-      
+
+      // Atualiza UI com mensagem do Usuário
+      displayMessage('Usuário', promptText, false);
+      chatHistory.push({ role: "user", content: promptText });
+
+      // Exibe indicador de carregamento
+      updateTypingState(true);
+
       try {
-        const responseText = await fetchFromGroq();
-        chatHistory.push({ role: "assistant", content: responseText });
-        renderMessage('P3dr0Poles AI', responseText, true);
-      } catch (error) {
-        console.error("Erro Crítico:", error);
-        renderMessage('Sistema', 'Falha na requisição. Verifique a chave de API ou conexão.', true);
+        const responseContent = await fetchGroqCompletions();
+        chatHistory.push({ role: "assistant", content: responseContent });
+        displayMessage('P3dr0Poles AI', responseContent, true);
+      } catch (err) {
+        console.error("Erro na comunicação:", err);
+        displayMessage('Sistema', 'Ocorreu um erro ao processar a resposta. Verifique o console.', true);
       } finally {
-        setTypingStatus(false);
+        updateTypingState(false);
       }
     }
 
-    // 6. COMUNICAÇÃO COM A API GROQ
-    async function fetchFromGroq() {
+    // Chamada HTTP para API da Groq
+    async function fetchGroqCompletions() {
       const payload = {
         model: MODEL_NAME,
         messages: chatHistory,
-        temperature: 0.1, // Temperatura baixa = mais foco e precisão técnica
-        max_tokens: 6000
+        temperature: 0.6,
+        max_completion_tokens: 4096
       };
 
-      const requestOptions = {
+      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${API_KEY_GROQ}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(payload)
-      };
+      });
 
-      const response = await fetch("https://api.groq.com/openai/v1/chat/completions", requestOptions);
-      
       if (!response.ok) {
-        throw new Error(`HTTP Erro Status: ${response.status}`);
+        const errDetails = await response.text();
+        console.error("Detalhes do erro:", errDetails);
+        throw new Error(`Servidor retornou código ${response.status}`);
       }
 
-      const data = await response.json();
-      return data.choices[0].message.content;
+      const responseData = await response.json();
+      return responseData.choices[0]?.message?.content || "Sem resposta.";
     }
 
-    // 7. RENDERIZAÇÃO E FORMATAÇÃO VISUAL
-    function renderMessage(role, content, isBot = false) {
-      const rowDiv = document.createElement('div');
-      rowDiv.className = 'message-row';
+    // Exibição de Mensagens na Tela
+    function displayMessage(roleName, messageBody, isBot = false) {
+      const row = document.createElement('div');
+      row.className = 'message-row';
 
-      const roleDiv = document.createElement('div');
-      roleDiv.className = 'message-role';
-      roleDiv.innerText = role;
+      const role = document.createElement('div');
+      role.className = 'message-role';
+      role.innerText = roleName;
 
-      const contentDiv = document.createElement('div');
-      contentDiv.className = 'message-content';
-      
-      // Processa Markdown se for o bot, senão exibe como texto normal
+      const content = document.createElement('div');
+      content.className = 'message-content';
+
       if (isBot) {
-        contentDiv.innerHTML = parseMarkdown(content);
+        content.innerHTML = formatMarkdown(messageBody);
       } else {
-        contentDiv.innerText = content;
+        content.innerText = messageBody;
       }
 
-      rowDiv.appendChild(roleDiv);
-      rowDiv.appendChild(contentDiv);
-      DOM.chatArea.appendChild(rowDiv);
+      row.appendChild(role);
+      row.appendChild(content);
+      DOM.chatArea.appendChild(row);
 
       scrollToBottom();
     }
 
-    // Analisador de Markdown personalizado para blocos de código
-    function parseMarkdown(text) {
-      // 1. Escapar HTML para segurança
-      let html = text
+    // Formatador Simples de Markdown para Código
+    function formatMarkdown(rawText) {
+      let escaped = rawText
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
-      // 2. Formatador de Bloco de Código (com botão de copiar)
-      const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-      html = html.replace(codeBlockRegex, (match, language, code) => {
-        const langClass = language ? `class="language-${language}"` : '';
-        const cleanCode = code.trim();
+      // Substituição de blocos ```codigo```
+      const blockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+      escaped = escaped.replace(blockRegex, (match, lang, code) => {
+        const languageClass = lang ? `class="language-${lang}"` : '';
+        const trimmedCode = code.trim();
         return `
           <div style="position: relative;">
-            <button class="copy-btn" data-code="${encodeURIComponent(cleanCode)}">Copiar</button>
-            <pre><code ${langClass}>${cleanCode}</code></pre>
+            <button class="copy-btn" data-code="${encodeURIComponent(trimmedCode)}">Copiar</button>
+            <pre><code ${languageClass}>${trimmedCode}</code></pre>
           </div>
         `;
       });
 
-      // 3. Formatador de Código Inline
-      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+      // Substituição de código inline `codigo`
+      escaped = escaped.replace(/`([^`]+)`/g, '<code>$1</code>');
 
-      // 4. Quebras de linha fora do código
-      html = html.replace(/\n/g, "<br>");
-      
-      // Correção de bugs visuais de <br> duplos no HTML
-      return html.replace(/(<br>\s*){2,}/g, '<br><br>');
+      // Quebras de linha
+      escaped = escaped.replace(/\n/g, "<br>");
+
+      return escaped.replace(/(<br>\s*){2,}/g, '<br><br>');
     }
 
-    // 8. UTILITÁRIOS INTERNOS
-    function setTypingStatus(isTyping) {
-      DOM.typing.style.display = isTyping ? 'block' : 'none';
-      if(isTyping) scrollToBottom();
+    // Utilitários
+    function updateTypingState(isThinking) {
+      DOM.typing.style.display = isThinking ? 'block' : 'none';
+      if (isThinking) scrollToBottom();
     }
 
     function scrollToBottom() {
       DOM.chatArea.scrollTop = DOM.chatArea.scrollHeight;
     }
 
-    function copyToClipboard(buttonElement) {
-      const codeRaw = decodeURIComponent(buttonElement.getAttribute('data-code'));
-      
-      navigator.clipboard.writeText(codeRaw).then(() => {
-        const originalText = buttonElement.innerText;
-        buttonElement.innerText = 'Copiado!';
-        buttonElement.style.color = '#fff';
-        
+    function execCopyCode(buttonNode) {
+      const codeText = decodeURIComponent(buttonNode.getAttribute('data-code'));
+      navigator.clipboard.writeText(codeText).then(() => {
+        const originalLabel = buttonNode.innerText;
+        buttonNode.innerText = 'Copiado!';
+        buttonNode.style.color = '#ffffff';
+
         setTimeout(() => {
-          buttonElement.innerText = originalText;
-          buttonElement.style.color = '#888';
+          buttonNode.innerText = originalLabel;
+          buttonNode.style.color = '#888888';
         }, 2000);
-      }).catch(err => {
-        console.error('Falha ao copiar:', err);
+      }).catch(e => {
+        console.error("Erro ao copiar código:", e);
       });
     }
 
-    // Boot
-    init();
+    // Inicia a aplicação
+    initApp();
   </script>
 </body>
-  </html>
-  
+</html>
